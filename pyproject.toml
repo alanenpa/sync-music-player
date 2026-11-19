@@ -6,8 +6,10 @@ readme = "README.md"
 authors = [
     { name = "Patrik Alanen", email = "alanen.patrik@gmail.com" }
 ]
-requires-python = ">=3.14"
-dependencies = []
+requires-python = ">=3.13"
+dependencies = [
+    "pygame>=2.6.1",
+]
 
 [project.scripts]
 sync-music-player = "sync_music_player:main"
