@@ -30,7 +30,7 @@ Follower:
 uv run node.py follow <port> <leader-ip:port>
 ```
  
-Example on one machine with 2 followers:
+Example on one machine, with each command in its own terminal. Start the leader first, then the followers, then press Enter in the leader’s terminal.
  
 ```
 uv run node.py lead 6000 song.mp3 127.0.0.1:6001 127.0.0.1:6002
