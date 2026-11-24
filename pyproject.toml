@@ -1,19 +1,26 @@
 [project]
 name = "sync-music-player"
 version = "0.1.0"
-description = "Add your description here"
+description = "Distributed synchronized music player using gRPC"
 readme = "README.md"
 authors = [
     { name = "Patrik Alanen", email = "alanen.patrik@gmail.com" }
 ]
 requires-python = ">=3.13"
 dependencies = [
+    "grpcio>=1.85.4",
+    "protobuf>=7.36.2",
     "pygame>=2.6.1",
 ]
 
 [project.scripts]
-sync-music-player = "sync_music_player:main"
+sync-music-player = "sync_music_player.cli:main"
 
 [build-system]
 requires = ["uv_build>=0.13.7,<0.14.0"]
 build-backend = "uv_build"
+
+[dependency-groups]
+dev = [
+    "grpcio-tools>=1.85.4",
+]

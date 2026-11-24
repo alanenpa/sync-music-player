@@ -1,0 +1,41 @@
+syntax = "proto3";
+
+package sync_player_package;
+
+service NodeService {
+  rpc Ping(PingRequest) returns (PingResponse);
+  rpc Play(PlayRequest) returns (PlayResponse);
+  rpc Health(HealthRequest) returns (HealthResponse);
+}
+
+message PingRequest {
+  string sender_id = 1;
+  double client_send_time = 2;
+}
+
+message PingResponse {
+  string responder_id = 1;
+  double server_time = 2;
+}
+
+message PlayRequest {
+  string sender_id = 1;
+  string track_path = 2;
+  double start_at_unix = 3;
+}
+
+message PlayResponse {
+  bool accepted = 1;
+  string message = 2;
+}
+
+message HealthRequest {
+  string sender_id = 1;
+}
+
+message HealthResponse {
+  string node_id = 1;
+  string role = 2;
+  bool healthy = 3;
+  double server_time = 4;
+}
