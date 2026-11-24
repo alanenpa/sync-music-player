@@ -22,16 +22,21 @@ class AudioPlayer:
         except pygame.error as exc:
             logging.error(f"Failed to initialize pygame.mixer; continuing without audio: {exc}")
 
-    async def schedule_play(self, track_path, delay_s):
-        resolved = Path(track_path)
-        if not resolved.is_file():
-            raise FileNotFoundError(f"Audio file not found: '{track_path}'")
+    async def _cancel_scheduled_play(self):
+        """Helper function to cancel and await any pending scheduled playback task."""
         if self._pending_task is not None and not self._pending_task.done():
             self._pending_task.cancel()
             try:
                 await self._pending_task
             except asyncio.CancelledError:
                 pass
+        self._pending_task = None
+
+    async def schedule_play(self, track_path, delay_s):
+        resolved = Path(track_path)
+        if not resolved.is_file():
+            raise FileNotFoundError(f"Audio file not found: '{track_path}'")
+        await self._cancel_scheduled_play()
         logging.info(f"Scheduled playback: track={track_path} delay_ms={delay_s * 1000.0:.1f}")
         self._pending_task = asyncio.create_task(self._play_after_delay(str(resolved), delay_s))
 
@@ -51,13 +56,7 @@ class AudioPlayer:
             logging.error(f"Audio playback failed: track={track_path} error={exc}")
 
     async def close_audio(self):
-        if self._pending_task is not None and not self._pending_task.done():
-            self._pending_task.cancel()
-            try:
-                await self._pending_task
-            except asyncio.CancelledError:
-                pass
-        self._pending_task = None
+        await self._cancel_scheduled_play()
         if self._mixer_initialized:
             try:
                 pygame.mixer.music.stop()

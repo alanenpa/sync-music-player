@@ -51,14 +51,14 @@ async def run(node):
         await node.shutdown()
 
 
-def main(argv=None):
+def main():
     parser = ArgumentParser(prog="sync-music-player", description="Synchronized distributed music player over gRPC.")
     parser.add_argument("--id", required=True, help="Unique node ID (e.g., node-1).")
     parser.add_argument("--listen", required=True, help="Listen address (e.g., 0.0.0.0:6000).")
     parser.add_argument("--peers", nargs="*", default=[], help="Peers in 'id=host:port' form.")
     parser.add_argument("--role", choices=["leader", "follower"], default="follower", help="Node role (default: follower).")
     parser.add_argument("--no-audio", action="store_true", help="Disable pygame audio initialization.")
-    args = parser.parse_args(argv)
+    args = parser.parse_args()
 
     try:
         peers = parse_peers(args.peers)
